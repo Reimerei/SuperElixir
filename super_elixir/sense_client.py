@@ -69,7 +69,7 @@ class ElixirSense:
     def _start_process(self):
         # start sub process
         self._proc = subprocess.Popen(
-            [self.elixir_exec, ELIXIR_SENSE_EXEC, 'unix', '0', 'dev'],
+            [self.elixir_exec, ELIXIR_SENSE_EXEC, 'unix', '0', 'test'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
