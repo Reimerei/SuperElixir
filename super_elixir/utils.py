@@ -12,6 +12,8 @@ def find_mix_project(cwd=None):
     cwd = cwd or os.getcwd()
     if cwd == os.path.realpath('/'):
         return None
+    elif os.path.exists(os.path.join(cwd, '../../mix.exs')):
+        return find_mix_project(os.path.dirname(os.path.dirname(cwd)))
     elif os.path.exists(os.path.join(cwd, 'mix.exs')):
         return cwd
     else:

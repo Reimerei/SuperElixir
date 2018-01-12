@@ -35,7 +35,12 @@ defmodule ElixirSense.Providers.Definition do
     file = if Code.ensure_loaded? module do
       case module.module_info(:compile)[:source] do
         nil    -> nil
-        source -> List.to_string(source)
+        source ->
+          source
+          |> List.to_string()
+          |> Path.split()
+          |> fix_docker_path()
+          |> Path.join()
       end
     end
     file = if file && File.exists?(file) do
@@ -48,6 +53,10 @@ defmodule ElixirSense.Providers.Definition do
     end
     {module, file}
   end
+
+  defp fix_docker_path(["/", "app" | rel]), do: [System.get_env("PWD") | rel]
+  defp fix_docker_path(["/", "home", "app" | rel]), do: [System.get_env("PWD") | rel]
+  defp fix_docker_path(other), do: other
 
   defp find_fun_line({_, file}, _fun) when file in ["non_existing", nil, ""] do
     {"non_existing", nil}
